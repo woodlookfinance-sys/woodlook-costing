@@ -1,0 +1,75 @@
+/* WOODLOOK — print.css
+   Only ever active inside the hidden #printArea while printing / exporting
+   to PDF. Forces A4 portrait, 4-side margins, and the exact page structure
+   required: Summary = 1 page. Detailed = Page 1 (photo+summary) then a
+   forced page break, Page 2 (BOM/wood/mdf/paint/polish/labour detail). */
+
+@page {
+  size: A4 portrait;
+  margin: 15mm 14mm 15mm 14mm;
+}
+
+@media print {
+  body * { visibility: hidden; }
+  #printArea, #printArea * { visibility: visible; }
+  #printArea {
+    display: block !important;
+    position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0;
+  }
+  .app-nav, .app-topbar, .no-print, #toastHost, .nav-scrim { display: none !important; }
+}
+
+#printArea {
+  font-family: 'Archivo', Arial, sans-serif;
+  color: #0b2545;
+  background: #fff;
+}
+
+#printArea .report-page {
+  width: 100%;
+  min-height: 267mm; /* A4 height minus top+bottom margins, keeps single-page reports tidy */
+  page-break-after: always;
+  break-after: page;
+}
+#printArea .report-page:last-child { page-break-after: auto; break-after: auto; }
+#printArea .page-break { page-break-before: always; break-before: page; }
+
+.report-heading {
+  text-align: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  font-size: 24pt;
+  color: #0b2545;
+  margin: 0 0 4mm;
+  letter-spacing: 0.01em;
+}
+.report-photo-wrap { display: flex; justify-content: center; margin: 0 0 6mm; }
+.report-photo-wrap .photo-box { width: 6cm; height: 6cm; border: 1pt solid #c4d3e3; border-radius: 4px; }
+
+.report-section-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 13pt; font-weight: 700; color: #0b2545;
+  margin: 6mm 0 2.5mm; padding-bottom: 1.5mm; border-bottom: 1pt solid #9fb8d1;
+}
+.report-section-title:first-of-type { margin-top: 0; }
+
+table.report-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 3mm; border: 0.5pt solid #9fb8d1; }
+table.report-table th {
+  text-align: left; background: #e7f0fa; color: #0b2545; font-weight: 700;
+  padding: 2.2mm 2.6mm; border: 0.5pt solid #9fb8d1; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.03em;
+}
+table.report-table td { padding: 2mm 2.6mm; border: 0.5pt solid #d7e4f0; }
+table.report-table td.num, table.report-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.report-table tbody tr:nth-child(even) td { background: #f5f9fd; }
+
+table.report-summary { width: 100%; border-collapse: collapse; font-size: 10.5pt; border: 0.5pt solid #9fb8d1; }
+table.report-summary td { padding: 2.2mm 3mm; border-bottom: 0.5pt solid #d7e4f0; }
+table.report-summary td:first-child { font-weight: 600; }
+table.report-summary td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+table.report-summary tr.total td { background: #e7f0fa; border-top: 1.3pt solid #0b2545; border-bottom: 0.5pt solid #0b2545; font-weight: 800; font-size: 12.5pt; padding-top: 3mm; padding-bottom: 3mm; }
+table.report-summary tr.price td { font-weight: 700; font-size: 11.5pt; color: #0b2545; font-family: 'Fraunces', Georgia, serif; }
+table.report-summary tr.sub td:first-child { padding-left: 5mm; color: #5a6c87; font-weight: 400; font-size: 9pt; font-style: italic; }
+table.report-summary tr.sub td:last-child { color: #5a6c87; font-weight: 400; }
+
+.report-two-col { display: flex; gap: 10mm; }
+.report-two-col > div { flex: 1; }
