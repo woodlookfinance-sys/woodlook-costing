@@ -22,6 +22,45 @@
   --font-body: 'Archivo', Georgia, serif;
 }
 
+/* ---------------- Colour themes ----------------
+   Default (above, html[data-theme="blue"] or no attribute) is Ocean Blue.
+   Switch themes from Settings → Appearance; the choice is saved per device. */
+
+html[data-theme="walnut"] {
+  --espresso: #3b2417; --walnut: #6b4226; --walnut-2: #8a5a34;
+  --amber: #c17f3e; --honey: #e0a860; --sawdust: #f7ecdd;
+  --paper: #fbf6ef; --paper-2: #f3e8d8; --ink: #3b2417; --ink-soft: #7a6650;
+  --line: #e6d5c0; --card: #ffffff; --good: #2f8f5b; --bad: #c0392b; --warn: #c17f3e;
+}
+
+html[data-theme="forest"] {
+  --espresso: #0f2f22; --walnut: #1f5c40; --walnut-2: #2f7d55;
+  --amber: #3f9e6a; --honey: #8fd6ae; --sawdust: #e8f6ee;
+  --paper: #f5fbf7; --paper-2: #e9f5ee; --ink: #0f2f22; --ink-soft: #5a7d6c;
+  --line: #d3ecdf; --card: #ffffff; --good: #2f8f5b; --bad: #c0392b; --warn: #3f9e6a;
+}
+
+html[data-theme="burgundy"] {
+  --espresso: #3a0d17; --walnut: #7a1f2b; --walnut-2: #9c2c3a;
+  --amber: #c1495a; --honey: #e28b96; --sawdust: #fbe9ec;
+  --paper: #fdf6f7; --paper-2: #f9e9eb; --ink: #3a0d17; --ink-soft: #8a5c63;
+  --line: #f0d4d8; --card: #ffffff; --good: #2f8f5b; --bad: #c0392b; --warn: #c1495a;
+}
+
+html[data-theme="slate"] {
+  --espresso: #1c1f26; --walnut: #3a4150; --walnut-2: #4f5a6e;
+  --amber: #6c7a94; --honey: #9fb0c9; --sawdust: #eef1f5;
+  --paper: #f7f8fa; --paper-2: #edf0f4; --ink: #1c1f26; --ink-soft: #626b7c;
+  --line: #dde2e9; --card: #ffffff; --good: #2f8f5b; --bad: #c0392b; --warn: #6c7a94;
+}
+
+html[data-theme="terracotta"] {
+  --espresso: #3d2210; --walnut: #8a4a1f; --walnut-2: #b0602a;
+  --amber: #d97b34; --honey: #f0ab6a; --sawdust: #fdefdf;
+  --paper: #fffaf4; --paper-2: #fbeddb; --ink: #3d2210; --ink-soft: #8a6a4d;
+  --line: #f2ddc1; --card: #ffffff; --good: #2f8f5b; --bad: #c0392b; --warn: #d97b34;
+}
+
 * { box-sizing: border-box; }
 
 html, body {
@@ -125,6 +164,7 @@ input, select, textarea { font-family: var(--font-body); }
 .app-nav.collapsed { width: 0; min-width: 0; padding: 0; opacity: 0; overflow: hidden; border: none; }
 
 .app-content { padding: 22px 26px 60px; max-width: 1180px; }
+.app-content.wide-content { max-width: 1520px; }
 
 /* ---------------- Buttons ---------------- */
 .btn {
@@ -154,8 +194,11 @@ input, select, textarea { font-family: var(--font-body); }
 @media (max-width: 560px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
 
 .stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.stat-cards--two { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; }
 @media (max-width: 880px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
 .stat-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+.stat-card-link { display: block; color: inherit; text-decoration: none; transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease; }
+.stat-card-link:hover { transform: translateY(-2px); border-color: #8fb4d4; box-shadow: 0 8px 20px rgba(30, 73, 111, 0.16); }
 .stat-card .label { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
 .stat-card .value { font-family: var(--font-display); font-size: 26px; margin-top: 4px; color: var(--espresso); }
 .stat-card .sub { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
@@ -189,6 +232,8 @@ table.data td { padding: 9px 12px; border-bottom: 1px solid #e2ecf7; vertical-al
 table.data tbody tr:hover { background: #eaf2fa; }
 table.data input, table.data select { padding: 6px 8px; font-size: 13px; border-radius: 7px; }
 .row-actions { display: flex; gap: 6px; }
+.product-report-link { color: var(--walnut); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+.product-report-link:hover { color: var(--amber); }
 .thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); background: var(--paper-2); }
 .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; background: var(--sawdust); color: var(--walnut); }
 .pill.hardware { background: #dbe9f7; color: #1c4d80; }
@@ -198,6 +243,24 @@ table.data input, table.data select { padding: 6px 8px; font-size: 13px; border-
 .pill.polish { background: #e7f0fa; color: #1c4d80; }
 .empty-state { text-align: center; padding: 50px 20px; color: var(--ink-soft); }
 .empty-state .big { font-size: 40px; margin-bottom: 8px; }
+
+/* Read-only on-screen product report: mirrors the printed/PDF report. */
+.report-view-note { color: var(--ink-soft); font-size: 13px; margin: 0 0 12px; }
+.report-preview { max-width: 900px; margin: 0 auto; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
+.report-preview .report-page { padding: 34px 42px; min-height: 900px; }
+.report-preview .report-page + .report-page { border-top: 10px solid #edf4fa; }
+.report-preview .report-heading { text-align: center; font-family: var(--font-display); font-size: 28px; color: var(--espresso); margin: 0 0 18px; }
+.report-preview .report-photo-wrap { display: flex; justify-content: center; margin-bottom: 20px; }
+.report-preview .photo-box { width: 6cm; height: 6cm; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; color: var(--ink-soft); }
+.report-preview .photo-box img { width: 100%; height: 100%; object-fit: cover; }
+.report-preview .report-section-title { font-family: var(--font-display); font-size: 18px; color: var(--espresso); margin: 22px 0 10px; padding-bottom: 7px; border-bottom: 1px solid #9fb8d1; }
+.report-preview table.report-summary, .report-preview table.report-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.report-preview table.report-summary td, .report-preview table.report-table th, .report-preview table.report-table td { padding: 9px 11px; border: 1px solid #d7e4f0; }
+.report-preview table.report-table th { text-align: left; background: #e7f0fa; color: var(--espresso); font-size: 11px; text-transform: uppercase; }
+.report-preview table.report-table .num, .report-preview table.report-summary td:last-child { text-align: right; }
+.report-preview table.report-summary tr.total td { background: #e7f0fa; font-size: 16px; font-weight: 800; }
+.report-preview table.report-summary tr.price td { font-weight: 700; color: var(--espresso); }
+.report-preview table.report-summary tr.sub td:first-child { padding-left: 24px; color: var(--ink-soft); }
 
 .pagination { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; font-size: 13px; }
 
@@ -292,6 +355,22 @@ table.data.dark-head td.dim-col input { width: 100%; box-sizing: border-box; min
   .nav-scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 35; display: none; }
   .nav-scrim.show { display: block; }
 }
+
+/* ---------------- Theme picker (Settings → Appearance) ---------------- */
+.theme-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px; margin-top: 12px;
+}
+.theme-swatch {
+  border: 2px solid var(--line); border-radius: 12px; padding: 10px;
+  cursor: pointer; background: var(--card); text-align: left;
+  font-family: var(--font-body); transition: border-color 0.15s ease, transform 0.1s ease;
+}
+.theme-swatch:hover { transform: translateY(-1px); }
+.theme-swatch.active { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+.theme-swatch .swatch-bar { display: flex; height: 22px; border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.theme-swatch .swatch-bar span { flex: 1; }
+.theme-swatch .swatch-name { font-size: 12.5px; font-weight: 600; }
 
 /* ---------------- Print styles pulled in separately (print.css) ---------------- */
 .report-only { display: none; }
