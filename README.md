@@ -116,7 +116,10 @@ online (see the sync dot in the bottom of the sidebar).
      print buttons.
 4. **Reports** — pick any product and print/export the Summary (1 page) or
    Detailed (exactly 2 pages) report. Use your browser's "Save as PDF" print
-   destination to export a PDF.
+   destination to export a PDF, or download either report as an Excel `.xlsx`
+   workbook. Each detailed workbook is a single, blue-formatted report sheet
+   with the product photo and editable Wood, MDF, Paint, Polish, Labour and
+   BOM sections; it can be imported back into the app, including the photo.
 5. **Backup / Restore** — download a full JSON backup (including photos), or
    restore one. Also includes a **sample data generator** to create 1000+ demo
    products for a real performance test (see §6), and a one-click remover for
