@@ -16,10 +16,14 @@ Pages.productCosting = {
     container.innerHTML = `
       <button class="btn btn-ghost" id="printSumBtn">Print Summary</button>
       <button class="btn btn-ghost" id="printDetBtn">Print Detailed</button>
+      <button class="btn btn-ghost" id="excelSumBtn">Excel Summary</button>
+      <button class="btn btn-ghost" id="excelDetBtn">Excel Detailed</button>
       <a class="btn btn-ghost" href="#/products">&larr; All Products</a>
     `;
     container.querySelector('#printSumBtn').onclick = () => Reports.printSummary(id);
     container.querySelector('#printDetBtn').onclick = () => Reports.printDetailed(id);
+    container.querySelector('#excelSumBtn').onclick = () => ReportsExcel.exportReport(id, false);
+    container.querySelector('#excelDetBtn').onclick = () => ReportsExcel.exportReport(id, true);
   },
 
   render(container, params) {
@@ -472,10 +476,14 @@ function renderSummaryTab(body, product, computed) {
       </table>
       <div style="display:flex;gap:10px;margin-top:18px;">
         <button class="btn btn-primary" id="pS">Print Summary Report</button>
+        <button class="btn btn-ghost" id="eS">Export Summary to Excel</button>
         <button class="btn btn-ghost" id="pD">Print Detailed Report</button>
+        <button class="btn btn-ghost" id="eD">Export Detailed to Excel</button>
       </div>
     </div>
   `;
   body.querySelector('#pS').onclick = () => Reports.printSummary(product.id);
+  body.querySelector('#eS').onclick = () => ReportsExcel.exportReport(product.id, false);
   body.querySelector('#pD').onclick = () => Reports.printDetailed(product.id);
+  body.querySelector('#eD').onclick = () => ReportsExcel.exportReport(product.id, true);
 }
