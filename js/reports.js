@@ -200,5 +200,5 @@ const Reports = (() => {
     requestAnimationFrame(() => window.print());
   }
 
-  return { printSummary, printDetailed };
+  return { printSummary, printDetailed, buildDetailedHtml };
 })();
