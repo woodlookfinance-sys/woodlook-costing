@@ -78,27 +78,16 @@ Pages.products = {
       <tr data-id="${p.id}">
         <td>${p.photo ? `<img class="thumb" src="${p.photo}" />` : `<div class="thumb"></div>`}</td>
         <td><strong>${Utils.escapeHtml(p.code || '')}</strong></td>
-        <td>${Utils.escapeHtml(p.name || '')}</td>
+        <td><a class="product-report-link" href="#/product-report/${p.id}">${Utils.escapeHtml(p.name || '')}</a></td>
         <td>${p.category ? `<span class="pill">${Utils.escapeHtml(p.category)}</span>` : ''}</td>
         <td>${Utils.money(c.totalProductionCost)}</td>
         <td>${Utils.money(c.wholesalePrice)}</td>
         <td>${Utils.money(c.retailPrice)}</td>
         <td class="row-actions">
-          <a class="btn btn-sm btn-primary" href="#/product/${p.id}">Open</a>
-          <button class="btn btn-sm btn-ghost" data-dup="${p.id}">Duplicate</button>
-          <button class="btn btn-sm btn-danger" data-del="${p.id}">Delete</button>
+          <a class="btn btn-sm btn-primary" href="#/product-report/${p.id}">View Report</a>
         </td>
       </tr>`;
     }).join('');
-
-    tbody.querySelectorAll('[data-dup]').forEach((b) => b.onclick = () => duplicateProduct(b.dataset.dup));
-    tbody.querySelectorAll('[data-del]').forEach((b) => b.onclick = () => {
-      if (confirm('Delete this product and all its BOM/costing data? This cannot be undone.')) {
-        Store.deleteProductCascade(b.dataset.del);
-        Utils.toast('Product deleted', 'success');
-        this.renderTable(container);
-      }
-    });
 
     const pager = container.querySelector('#prodPagination');
     pager.innerHTML = `
