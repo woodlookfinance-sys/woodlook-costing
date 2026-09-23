@@ -1,6 +1,23 @@
 /* WOODLOOK — pages/settings.js */
 window.Pages = window.Pages || {};
 
+const THEMES = [
+  { id: 'blue', name: 'Ocean Blue', colors: ['#0b2545', '#2f6fae', '#7ec1ea'] },
+  { id: 'walnut', name: 'Walnut', colors: ['#3b2417', '#8a5a34', '#e0a860'] },
+  { id: 'forest', name: 'Forest', colors: ['#0f2f22', '#2f7d55', '#8fd6ae'] },
+  { id: 'burgundy', name: 'Burgundy', colors: ['#3a0d17', '#9c2c3a', '#e28b96'] },
+  { id: 'slate', name: 'Slate', colors: ['#1c1f26', '#4f5a6e', '#9fb0c9'] },
+  { id: 'terracotta', name: 'Terracotta', colors: ['#3d2210', '#b0602a', '#f0ab6a'] },
+];
+
+const Theme = {
+  get() { try { return localStorage.getItem('woodlook-theme') || 'blue'; } catch (e) { return 'blue'; } },
+  set(id) {
+    try { localStorage.setItem('woodlook-theme', id); } catch (e) {}
+    document.documentElement.setAttribute('data-theme', id);
+  },
+};
+
 Pages.settings = {
   title: 'Settings',
   actions(container) { container.innerHTML = ''; },
@@ -9,8 +26,22 @@ Pages.settings = {
     const url = SheetsAPI.getUrl();
     const queue = await LocalDB.getQueue();
     const lastSync = await LocalDB.getMeta('lastSync');
+    const activeTheme = Theme.get();
 
     container.innerHTML = `
+      <div class="card">
+        <div class="card-head"><h3>Appearance</h3></div>
+        <p>Pick a colour theme for the app. This is saved on this device only.</p>
+        <div class="theme-grid" id="themeGrid">
+          ${THEMES.map((t) => `
+            <button type="button" class="theme-swatch ${t.id === activeTheme ? 'active' : ''}" data-theme-id="${t.id}">
+              <div class="swatch-bar">${t.colors.map((c) => `<span style="background:${c}"></span>`).join('')}</div>
+              <div class="swatch-name">${t.name}</div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-head"><h3>Google Sheet Connection</h3></div>
         <p>Paste the Web App URL from your deployed Google Apps Script (see <code>gas/Code.gs</code> and the README for setup steps). The Google Sheet is the database — this app reads and writes to it through that URL.</p>
@@ -37,6 +68,15 @@ Pages.settings = {
         <p>WOODLOOK PRODUCT COSTING runs entirely in your browser as static files (no server required) and uses a Google Sheet as its database via Google Apps Script. All edits are cached locally in IndexedDB first, so the app stays instant even with 1000+ products, and syncs to the Sheet in the background.</p>
       </div>
     `;
+
+    container.querySelectorAll('#themeGrid [data-theme-id]').forEach((btn) => {
+      btn.onclick = () => {
+        Theme.set(btn.dataset.themeId);
+        container.querySelectorAll('#themeGrid .theme-swatch').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        Utils.toast('Theme updated', 'success');
+      };
+    });
 
     container.querySelector('#btnSaveUrl').onclick = async () => {
       const val = container.querySelector('#apiUrl').value.trim();
