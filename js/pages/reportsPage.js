@@ -11,8 +11,9 @@ Pages.reports = {
     const self = this;
     container.innerHTML = `
       <div class="card">
-        <div class="card-head"><h3>Print a Report</h3></div>
-        <p>Pick a product, then choose which report to generate. Both open your browser's print dialog — choose "Save as PDF" as the destination for a PDF export.</p>
+        <div class="card-head"><h3>Print or Export a Report</h3></div>
+        <p>Pick a product, then print it, save it as a PDF, or download a blue-formatted Excel workbook. The detailed report keeps all data and the product photo on one editable sheet, ready to import back into the app.</p>
+        <div class="field"><label>Import a WOODLOOK Excel report</label><input id="repImport" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /></div>
         <div class="field"><label>Find Product</label><input id="repSearch" type="text" placeholder="Search by code or name..." /></div>
         <div id="repResults"></div>
       </div>
@@ -31,6 +32,10 @@ Pages.reports = {
       self._q = e.target.value;
       self.renderResults(container);
     }, 200);
+    container.querySelector('#repImport').onchange = (e) => {
+      if (e.target.files[0]) ReportsExcel.importReport(e.target.files[0]);
+      e.target.value = '';
+    };
     this.renderResults(container);
   },
 
@@ -52,11 +57,15 @@ Pages.reports = {
           <td>${Utils.escapeHtml(p.name || '')}</td>
           <td class="row-actions">
             <button class="btn btn-sm btn-primary" data-sum="${p.id}">Print Summary</button>
+            <button class="btn btn-sm btn-ghost" data-sum-xlsx="${p.id}">Excel Summary</button>
             <button class="btn btn-sm btn-ghost" data-det="${p.id}">Print Detailed</button>
+            <button class="btn btn-sm btn-ghost" data-det-xlsx="${p.id}">Excel Detailed</button>
           </td>
         </tr>`).join('')}</tbody>
     </table></div>`;
     host.querySelectorAll('[data-sum]').forEach((b) => b.onclick = () => Reports.printSummary(b.dataset.sum));
+    host.querySelectorAll('[data-sum-xlsx]').forEach((b) => b.onclick = () => ReportsExcel.exportReport(b.dataset.sumXlsx, false));
     host.querySelectorAll('[data-det]').forEach((b) => b.onclick = () => Reports.printDetailed(b.dataset.det));
+    host.querySelectorAll('[data-det-xlsx]').forEach((b) => b.onclick = () => ReportsExcel.exportReport(b.dataset.detXlsx, true));
   },
 };
