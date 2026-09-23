@@ -15,13 +15,14 @@ const App = (() => {
     const parts = h.split('/').filter(Boolean);
     if (parts.length === 0) return { page: 'dashboard' };
     if (parts[0] === 'product' && parts[1]) return { page: 'productCosting', id: parts[1], tab: parts[2] };
+    if (parts[0] === 'product-report' && parts[1]) return { page: 'productReportView', id: parts[1] };
     const map = { dashboard: 'dashboard', materials: 'materials', products: 'products', reports: 'reports', backup: 'backup', settings: 'settings' };
     return { page: map[parts[0]] || 'dashboard' };
   }
 
   function updateActiveNav(routeKey) {
     document.querySelectorAll('.nav-link').forEach((a) => a.classList.remove('active'));
-    const keyToNavId = { dashboard: 'dashboard', materials: 'materials', products: 'products', productCosting: 'product-costing', reports: 'reports', backup: 'backup', settings: 'settings' };
+    const keyToNavId = { dashboard: 'dashboard', materials: 'materials', products: 'products', productCosting: 'product-costing', productReportView: 'products', reports: 'reports', backup: 'backup', settings: 'settings' };
     const navId = keyToNavId[routeKey];
     if (navId) {
       const link = document.querySelector(`.nav-link[data-route="${navId}"]`);
@@ -36,13 +37,14 @@ const App = (() => {
       materials: Pages.materials,
       products: Pages.products,
       productCosting: Pages.productCosting,
+      productReportView: Pages.productReportView,
       reports: Pages.reports,
       backup: Pages.backup,
       settings: Pages.settings,
     };
     const page = pageMap[route.page] || Pages.dashboard;
     document.getElementById('pageTitle').textContent =
-      route.page === 'productCosting'
+      route.page === 'productCosting' || route.page === 'productReportView'
         ? (Store.state.Products.find((p) => String(p.id) === String(route.id))?.name || 'Product Costing')
         : page.title;
 
@@ -51,6 +53,7 @@ const App = (() => {
     if (page.actions) page.actions(actionsHost, route);
 
     const content = document.getElementById('appContent');
+    content.classList.toggle('wide-content', route.page === 'products' || route.page === 'materials');
     page.render(content, route);
     updateActiveNav(route.page);
     closeMobileNav();
