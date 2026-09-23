@@ -10,26 +10,13 @@ Pages.dashboard = {
     const products = Store.state.Products;
     const materials = Store.state.Materials;
 
-    let totalCost = 0, totalRetail = 0;
-    products.forEach((p) => {
-      const c = Calc.computeProductCost(p.id).summary;
-      totalCost += c.totalProductionCost;
-      totalRetail += c.retailPrice;
-    });
-    const avgCost = products.length ? totalCost / products.length : 0;
-    const avgMargin = products.length
-      ? products.reduce((a, p) => a + (Number(p.retailMargin) || 0), 0) / products.length
-      : 0;
-
     const catCounts = {};
     materials.forEach((m) => { catCounts[m.category] = (catCounts[m.category] || 0) + 1; });
 
     container.innerHTML = `
-      <div class="stat-cards">
-        <div class="stat-card"><div class="label">Products</div><div class="value">${products.length}</div><div class="sub">stored in the sheet</div></div>
-        <div class="stat-card"><div class="label">Raw Materials</div><div class="value">${materials.length}</div><div class="sub">across ${Object.keys(catCounts).length} categories</div></div>
-        <div class="stat-card"><div class="label">Avg. Production Cost</div><div class="value">${Utils.money(avgCost)}</div><div class="sub">per product</div></div>
-        <div class="stat-card"><div class="label">Avg. Retail Margin</div><div class="value">${avgMargin.toFixed(1)}%</div><div class="sub">across all products</div></div>
+      <div class="stat-cards stat-cards--two">
+        <a class="stat-card stat-card-link" href="#/products"><div class="label">Products</div><div class="value">${products.length}</div><div class="sub">View product list &amp; search</div></a>
+        <a class="stat-card stat-card-link" href="#/materials"><div class="label">Raw Materials</div><div class="value">${materials.length}</div><div class="sub">View material list &amp; search</div></a>
       </div>
 
       <div class="grid grid-2">
